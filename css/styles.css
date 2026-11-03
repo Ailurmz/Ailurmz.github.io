@@ -1,6 +1,5 @@
 /* Portfolio — Ailen Ramirez · Estilos */
 
-/* Layout: columna editorial de un solo eje; títulos gigantes a sangre, fichas en grilla 4/8, mockups 16:10 escalados con container queries. */
 :root {
   --bg: #ECE5D8;        /* arena */
   --bg-2: #E2D9C8;      /* arena profunda */
@@ -12,7 +11,7 @@
   --accent-ink: #FFFFFF;
   --code-bg: #26272A;
   --code-fg: #E7E0D2;
-  --blue: #2B3BFF;      /* azul Klein: segundo acento, solo momentos grandes */
+  --blue: #2B3BFF;      /* azul klein */
   --band-bg: #2B3BFF;
   --band-fg: #ECE5D8;
   --grain-op: .11;
@@ -320,7 +319,7 @@ img { max-width: 100%; display: block; }
 .site-footer a { text-decoration: none; }
 .site-footer a:hover { color: var(--accent); }
 
-/* ---------- Mockups en código (reemplazables por <img>) ---------- */
+/* ---------- Mockups ---------- */
 .mock { position: absolute; inset: 0; font-size: 1.6cqw; color: var(--ink); }
 .mock * { box-sizing: border-box; }
 .win {
@@ -362,7 +361,7 @@ img { max-width: 100%; display: block; }
 .code-card .s { color: #D8C9A3; }
 .code-card .c { color: #8A857C; }
 
-/* 02 Sitios */
+/* 02 Landing */
 .m-web { background: var(--bg-2); }
 .m-web .win { left: 6%; top: 9%; width: 66%; height: 86%; }
 .site { padding: 1.2em 1.6em; height: calc(100% - 2em); display: grid; grid-template-rows: auto auto 1fr; gap: 1.3em; }
@@ -448,7 +447,7 @@ img { max-width: 100%; display: block; }
   html { scroll-behavior: auto; }
 }
 
-/* ---------- Capas: fondo, grano, cortinas, feed, cursor ---------- */
+/* ---------- Capas ---------- */
 #layers { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 #layers.is-static { position: absolute; height: 100vh; }
 main, .site-footer { position: relative; z-index: 1; }
@@ -457,7 +456,7 @@ body::after {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
-/* Cortina azul con grilla que barre cada mockup al entrar */
+/* Cortina de los mockups */
 .media::after {
   content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
   background-color: var(--band-bg);
@@ -469,10 +468,10 @@ body::after {
   transition: transform 1.15s var(--ease);
 }
 .media.reveal.is-pending::after { transform: translateX(0); transition: none; }
-/* Parallax interno: cada pieza del mockup tiene su profundidad (--d) */
+/* Parallax de mockups */
 .mock [style*="--d"] { translate: 0 calc(var(--p, 0) * var(--d) * 1.4cqw); }
 
-/* Bloque azul pleno (Datos) */
+/* Bloque azul */
 .band {
   position: relative;
   background-color: var(--band-bg);
@@ -495,7 +494,7 @@ body::after {
 }
 .stat.is-pending .stat-shape * { stroke-dashoffset: 1; }
 
-/* Feed de stories que pasa al lado del primer "Sobre mí" */
+/* Feed */
 .about { position: relative; }
 .feed {
   position: absolute; top: 50%; right: max(var(--gutter), env(safe-area-inset-right, 0px));
@@ -516,7 +515,7 @@ body::after {
 .fc.c-ink { background: var(--ink); color: var(--bg); }
 .fc.c-paper { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
 
-/* Marquee controlado por scroll */
+/* Marquee */
 .marquee-inner { display: flex; flex-shrink: 0; will-change: transform; }
 .marquee-inner.is-js .marquee-track { animation: none; }
 

@@ -6,7 +6,7 @@
   var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   var small = matchMedia('(max-width: 760px)').matches || !fine;
 
-  /* Tema claro / oscuro */
+  /* Tema */
   try { var saved = localStorage.getItem('ar-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
   document.getElementById('theme-toggle').addEventListener('click', function () {
     var current = root.getAttribute('data-theme') ||
@@ -16,7 +16,7 @@
     try { localStorage.setItem('ar-theme', next); } catch (e) {}
   });
 
-  /* Header con fondo al scrollear */
+  /* Header */
   var header = document.querySelector('.site-header');
   function onScroll() { header.classList.toggle('is-scrolled', window.scrollY > 40); }
   onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
@@ -35,11 +35,7 @@
     } else { fallback(); }
   });
 
-  /* ================= CAPAS: canvas de fondo =================
-     Capa código: grilla blueprint + signos que flotan.
-     Capa diseño: círculo seleccionado tipo Figma + curva Bézier con puntos de control.
-     Capa contenido: tarjetas de story y post.
-     Cada capa tiene distinta profundidad (scroll y mouse). */
+  /* ---------- Canvas de fondo ---------- */
   var cv = document.getElementById('layers');
   var ctx = cv && cv.getContext && cv.getContext('2d');
   var W = 0, H = 0, col = {}, mouse = { x: 0, y: 0 }, sm = { x: 0, y: 0 }, glyphs = [];
@@ -110,16 +106,16 @@
     var R = Math.min(W, H) * (small ? .34 : .3) * (1 + .012 * Math.sin(t * .0007));
     var cx = W * (small ? .68 : .7) + mx * 28, cy = H * (small ? .36 : .46) + hy + my * 28;
 
-    /* resplandor azul */
+    /* glow */
     var gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.6);
     gr.addColorStop(0, col['--blue'] + '2E'); gr.addColorStop(1, col['--blue'] + '00');
     ctx.globalAlpha = 1; ctx.fillStyle = gr; ctx.fillRect(cx - R * 1.6, cy - R * 1.6, R * 3.2, R * 3.2);
 
-    /* guía vertical (rojo fino, como las guías de Figma) */
+    /* guía */
     ctx.strokeStyle = col['--accent']; ctx.lineWidth = 1; ctx.globalAlpha = .25;
     ctx.beginPath(); ctx.moveTo(Math.round(cx) + .5, 0); ctx.lineTo(Math.round(cx) + .5, H); ctx.stroke();
 
-    /* círculo + caja de selección + medida */
+    /* círculo */
     ctx.strokeStyle = col['--blue']; ctx.lineWidth = 1.25; ctx.globalAlpha = .75;
     ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
     ctx.lineWidth = 1; ctx.globalAlpha = .45; ctx.strokeRect(cx - R, cy - R, R * 2, R * 2);
@@ -133,7 +129,7 @@
     ctx.fillStyle = col['--blue']; rr(cx - tw / 2 - 8, cy + R + 10, tw + 16, 20, 4); ctx.fill();
     ctx.fillStyle = col['--band-fg']; ctx.fillText(lbl, cx - tw / 2, cy + R + 24);
 
-    /* curva Bézier con sus manijas */
+    /* bézier */
     var bx = mx * 14, by = my * 14;
     var p0 = [W * .03 + bx, H * (small ? .94 : .9) + hy + by];
     var p3 = [W * (small ? .92 : .52) + bx, H * (small ? .78 : .66) + hy + by];
@@ -148,7 +144,7 @@
     ctx.globalAlpha = .85; ctx.fillStyle = col['--accent'];
     [c1, c2].forEach(function (p) { ctx.beginPath(); ctx.arc(p[0], p[1], 3.5, 0, Math.PI * 2); ctx.fill(); });
 
-    /* capa contenido: tarjetas (la más cercana, se mueve más) */
+    /* tarjetas */
     if (!small) {
       card(W * .9 + mx * 46, H * .34 + hy * 1.15 + Math.sin(t * .0005) * 10 + my * 46, 88, 156, -.06, 'story', 'Story · 1080×1920');
       card(W * .5 + mx * 40, H * .15 + hy * 1.25 + Math.cos(t * .00045) * 8 + my * 40, 92, 92, .05, 'post', 'Post · 1080×1080');
@@ -182,7 +178,7 @@
       (function frame(now) {
         requestAnimationFrame(frame);
         if (document.hidden) return;
-        if (small && now - last < 33) return; /* 30 fps en celular */
+        if (small && now - last < 33) return;
         last = now;
         draw(now - t0, window.scrollY);
       })(t0);
@@ -191,7 +187,7 @@
 
   if (reduce || !('IntersectionObserver' in window)) return;
 
-  /* ================= Cursor ================= */
+  /* ---------- Cursor ---------- */
   var cur = document.getElementById('cursor');
   if (fine && cur) {
     var cx = -100, cy = -100, tx = -100, ty = -100;
@@ -210,7 +206,7 @@
     })();
   }
 
-  /* ================= Marquee según scroll ================= */
+  /* ---------- Marquee ---------- */
   var mq = document.querySelector('.marquee-inner');
   if (mq) {
     mq.classList.add('is-js');
@@ -229,7 +225,7 @@
     })();
   }
 
-  /* ================= Parallax interno de los mockups ================= */
+  /* ---------- Parallax ---------- */
   var medias = Array.prototype.slice.call(document.querySelectorAll('.media'));
   var ticking = false;
   function para() {
@@ -244,7 +240,7 @@
   para();
   window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(para); } }, { passive: true });
 
-  /* ================= Apariciones y contadores ================= */
+  /* ---------- Reveal y contadores ---------- */
   function count(el) {
     var to = +el.dataset.count, from = +el.dataset.from || 0, dur = 1600, t0 = null;
     function step(t) {
@@ -256,8 +252,7 @@
     requestAnimationFrame(step);
   }
 
-  /* Solo se ocultan (para animarse) los elementos que están fuera de pantalla al cargar */
-  var vh = window.innerHeight;
+    var vh = window.innerHeight;
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) {
       if (!en.isIntersecting) return;
